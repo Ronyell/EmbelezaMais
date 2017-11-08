@@ -1,4 +1,4 @@
-import pip
+from pip.req import parse_requirements
 import os
 from setuptools import find_packages, setup
 
@@ -8,19 +8,14 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+# parse_requirements() returns generator of pip.req.InstallRequirement objects
+install_reqs = parse_requirements('requirements.txt', session='hack')
 
-requires = []
+# reqs is a list of requirement
+# e.g. ['django==1.5.1', 'mezzanine==1.4.6']
+requires = [str(ir.req) for ir in install_reqs]
 
-try:
-    requirements = pip.req.parse_requirements('requirements.txt')
-except:
-    # new versions of pip requires a session
-    requirements = pip.req.parse_requirements(
-        'requirements.txt', session=pip.download.PipSession())
 
-for item in requirements:
-        requires.append(str(item.req))
- 
 setup(
     name='Embeleza-Mais',
     version='0.1',
