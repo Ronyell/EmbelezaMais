@@ -7,6 +7,19 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+
+requires = []
+
+try:
+    requirements = pip.req.parse_requirements('requirements.txt')
+except:
+    # new versions of pip requires a session
+    requirements = pip.req.parse_requirements(
+        'requirements.txt', session=pip.download.PipSession())
+
+for item in requirements:
+        requires.append(str(item.req))
+ 
 setup(
     name='Embeleza-Mais',
     version='0.1',
@@ -18,6 +31,7 @@ setup(
     url='https://www.example.com/',
     author='Your Name',
     author_email='yourname@example.com',
+    install_requires=requires,
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
